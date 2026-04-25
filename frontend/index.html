@@ -1,0 +1,1566 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VTU Autopilot — Skip the Suffering</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230f172a'/%3E%3Cpath d='M16 5c0 0 7 4 7 11 0 3.5-1.6 6.5-4 8.2V26l-3-2-3 2v-1.8C10.6 22.5 9 19.5 9 16 9 9 16 5 16 5z' fill='%2360a5fa' opacity='.15'/%3E%3Cpath d='M16 5c0 0 7 4 7 11 0 3.5-1.6 6.5-4 8.2V26l-3-2-3 2v-1.8C10.6 22.5 9 19.5 9 16 9 9 16 5 16 5z' fill='none' stroke='%2360a5fa' stroke-width='1.5' stroke-linejoin='round'/%3E%3Ccircle cx='16' cy='15' r='2.2' fill='%2360a5fa'/%3E%3Cpath d='M12 24.5c-1.5 1-2.5 2-2 3s2 .5 3.5-.5M20 24.5c1.5 1 2.5 2 2 3s-2 .5-3.5-.5' stroke='%2360a5fa' stroke-width='1.2' stroke-linecap='round' opacity='.7'/%3E%3C/svg%3E" />
+  <meta name="description" content="Auto-complete your VTU online courses while you do literally anything else with your life." />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #070c16;
+      --surface:   #0c1322;
+      --card:      #111827;
+      --border:    #1e293b;
+      --accent:    #38bdf8;
+      --accent2:   #818cf8;
+      --green:     #4ade80;
+      --yellow:    #fbbf24;
+      --red:       #f87171;
+      --text:      #e2e8f0;
+      --muted:     #64748b;
+      --font-ui:   -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: "Cascadia Code", "Fira Code", "Courier New", monospace;
+      --radius:    12px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-ui);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image: radial-gradient(rgba(56,189,248,0.06) 1px, transparent 1px);
+      background-size: 28px 28px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 1.25rem;
+    }
+
+    section { padding: 3rem 0; }
+    section + section { border-top: 1px solid var(--border); }
+
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(7,12,22,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0.75rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .nav-logo svg { color: var(--accent); }
+
+    .nav-star {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      background: rgba(251,191,36,0.1);
+      border: 1px solid rgba(251,191,36,0.35);
+      border-radius: 8px;
+      color: var(--yellow);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.4rem 0.9rem;
+      text-decoration: none;
+      transition: background 0.15s, transform 0.15s;
+    }
+    .nav-star:hover { background: rgba(251,191,36,0.18); transform: translateY(-1px); }
+
+    .hero { padding: 4.5rem 0 3rem; text-align: center; }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(56,189,248,0.08);
+      border: 1px solid rgba(56,189,248,0.25);
+      color: var(--accent);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.9rem;
+      border-radius: 99px;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.4rem, 6vw, 3.8rem);
+      font-weight: 800;
+      line-height: 1.1;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 55%, #c4b5fd 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 1rem;
+    }
+
+    .hero-tagline {
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 580px;
+      margin: 0 auto 2.75rem;
+      line-height: 1.7;
+    }
+    .hero-tagline em { color: var(--yellow); font-style: normal; }
+
+    .stats-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+    }
+
+    .stat-pill {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem 1.75rem;
+      text-align: center;
+      flex: 1 1 190px;
+      max-width: 260px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-pill::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+    }
+
+    .stat-number {
+      display: block;
+      font-size: 2.1rem;
+      font-weight: 800;
+      font-family: var(--font-mono);
+      color: var(--accent);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 0.72rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-top: 0.35rem;
+    }
+
+    .github-banner {
+      background: linear-gradient(135deg, rgba(251,191,36,0.07) 0%, rgba(129,140,248,0.07) 100%);
+      border: 1px solid rgba(251,191,36,0.2);
+      border-radius: var(--radius);
+      padding: 1.5rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+    }
+
+    .github-banner-text h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 0.2rem;
+    }
+
+    .github-banner-text p {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    .github-banner-text p em { color: var(--yellow); font-style: normal; }
+
+    .star-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      background: linear-gradient(135deg, #f59e0b, #fbbf24);
+      border: none;
+      border-radius: 8px;
+      color: #1a0f00;
+      font-size: 0.9rem;
+      font-weight: 700;
+      padding: 0.65rem 1.4rem;
+      text-decoration: none;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 4px 14px rgba(251,191,36,0.25);
+    }
+    .star-btn:hover { opacity: 0.92; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(251,191,36,0.35); }
+
+    .section-label {
+      font-size: 0.68rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+    }
+
+    .section-title {
+      font-size: 1.55rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+    }
+
+    .section-sub {
+      color: var(--muted);
+      font-size: 0.875rem;
+      margin-bottom: 2rem;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+
+    @media (max-width: 560px) { .steps { grid-template-columns: 1fr; } }
+
+    .step {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.4rem;
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      transition: border-color 0.2s;
+    }
+    .step:hover { border-color: rgba(56,189,248,0.35); }
+
+    .step-icon {
+      width: 2.2rem;
+      height: 2.2rem;
+      flex-shrink: 0;
+      border-radius: 8px;
+      background: rgba(56,189,248,0.08);
+      border: 1px solid rgba(56,189,248,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+    }
+
+    .step-icon svg { width: 16px; height: 16px; stroke-width: 2; }
+
+    .step-body h3 { font-size: 0.9rem; font-weight: 600; margin-bottom: 0.25rem; }
+    .step-body p  { font-size: 0.8rem; color: var(--muted); line-height: 1.55; }
+
+    .form-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      align-items: start;
+    }
+
+    @media (max-width: 680px) { .form-layout { grid-template-columns: 1fr; } }
+
+    .form-layout-left { display: flex; flex-direction: column; gap: 1rem; }
+
+    .form-aside {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.4rem;
+    }
+
+    .form-aside h4 {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .form-aside h4 svg { width: 14px; height: 14px; color: var(--accent); }
+
+    .aside-tip {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.65rem;
+      margin-bottom: 0.75rem;
+    }
+    .aside-tip:last-child { margin-bottom: 0; }
+
+    .aside-tip svg {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+      margin-top: 0.15rem;
+      color: var(--green);
+    }
+
+    .aside-tip p { font-size: 0.8rem; color: var(--muted); line-height: 1.5; }
+    .aside-tip p b { color: var(--text); font-weight: 500; }
+
+    .form-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+    }
+
+    .form-row { margin-bottom: 1.1rem; }
+
+    label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 0.4rem;
+    }
+
+    .input-wrap { position: relative; }
+
+    input[type="email"],
+    input[type="password"],
+    input[type="text"] {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      padding: 0.6rem 0.85rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(56,189,248,0.1);
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      pointer-events: none;
+      display: flex;
+    }
+    .input-icon svg { width: 15px; height: 15px; }
+
+    .has-icon input { padding-left: 2.25rem; }
+
+    .toggle-pw {
+      position: absolute;
+      right: 0.6rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      padding: 0.25rem;
+      display: flex;
+      align-items: center;
+      transition: color 0.15s;
+    }
+    .toggle-pw:hover { color: var(--text); }
+    .toggle-pw svg { width: 16px; height: 16px; }
+
+    .hint {
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-top: 0.35rem;
+      line-height: 1.5;
+    }
+    .hint code {
+      background: rgba(255,255,255,0.06);
+      padding: 0.1em 0.4em;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 0.85em;
+      color: var(--accent);
+    }
+
+    .form-error {
+      background: rgba(248,113,113,0.08);
+      border: 1px solid rgba(248,113,113,0.3);
+      color: var(--red);
+      border-radius: 8px;
+      padding: 0.6rem 0.85rem;
+      font-size: 0.825rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .form-error svg { width: 15px; height: 15px; flex-shrink: 0; }
+
+    .btn-primary {
+      width: 100%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border: none;
+      border-radius: 8px;
+      color: #04080f;
+      font-size: 0.95rem;
+      font-weight: 700;
+      padding: 0.75rem 1.5rem;
+      cursor: pointer;
+      letter-spacing: 0.02em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: opacity 0.2s, transform 0.15s;
+    }
+    .btn-primary svg { width: 16px; height: 16px; }
+    .btn-primary:hover:not(:disabled) { opacity: 0.9; transform: translateY(-1px); }
+    .btn-primary:active:not(:disabled) { transform: translateY(0); }
+    .btn-primary:disabled { opacity: 0.45; cursor: not-allowed; }
+
+    .btn-secondary {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 0.875rem;
+      font-weight: 600;
+      padding: 0.55rem 1.1rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .btn-secondary svg { width: 14px; height: 14px; }
+    .btn-secondary:hover { border-color: var(--accent); background: rgba(56,189,248,0.04); }
+
+    .track-row {
+      display: flex;
+      gap: 0.65rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .track-row input { flex: 1; min-width: 180px; }
+
+    .divider {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.75rem;
+      margin: 1.4rem 0;
+      position: relative;
+    }
+    .divider::before, .divider::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      width: 40%;
+      height: 1px;
+      background: var(--border);
+    }
+    .divider::before { left: 0; }
+    .divider::after  { right: 0; }
+
+    .progress-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+    }
+
+    .job-id-row {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.4rem;
+      padding: 0.65rem 0.9rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+
+    .job-id-label {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    #displayJobId {
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      color: var(--accent);
+      word-break: break-all;
+      flex: 1;
+    }
+
+    .copy-btn {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 0.72rem;
+      padding: 0.2rem 0.55rem;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      transition: all 0.15s;
+    }
+    .copy-btn svg { width: 12px; height: 12px; }
+    .copy-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    .progress-bar-wrap {
+      background: var(--surface);
+      border-radius: 99px;
+      height: 10px;
+      overflow: hidden;
+      margin-bottom: 0.45rem;
+      border: 1px solid var(--border);
+    }
+
+    #progressFill {
+      height: 100%;
+      width: 0%;
+      border-radius: 99px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      transition: width 0.4s ease;
+      position: relative;
+    }
+
+    #progressFill::after {
+      content: "";
+      position: absolute;
+      right: 0; top: 0;
+      height: 100%; width: 24px;
+      background: rgba(255,255,255,0.25);
+      filter: blur(4px);
+      animation: shimmer 1.5s infinite;
+    }
+
+    @keyframes shimmer {
+      0%   { opacity: 0; }
+      50%  { opacity: 1; }
+      100% { opacity: 0; }
+    }
+
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-bottom: 1.2rem;
+    }
+
+    #progressPct { color: var(--accent); font-weight: 700; }
+
+    .terminal {
+      background: #050a10;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .terminal-titlebar {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.5rem 0.85rem;
+      background: #0a1020;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .dot { width: 10px; height: 10px; border-radius: 50%; }
+    .dot-red    { background: #ff5f56; }
+    .dot-yellow { background: #ffbd2e; }
+    .dot-green  { background: #27c93f; }
+
+    .terminal-title {
+      font-size: 0.68rem;
+      color: var(--muted);
+      margin-left: 0.4rem;
+      font-family: var(--font-mono);
+    }
+
+    #logTerminal {
+      padding: 1rem;
+      height: 300px;
+      overflow-y: auto;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      line-height: 1.75;
+    }
+
+    #logTerminal::-webkit-scrollbar { width: 4px; }
+    #logTerminal::-webkit-scrollbar-track { background: transparent; }
+    #logTerminal::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+    .log-line { white-space: pre-wrap; word-break: break-all; }
+    .log-log     { color: #475569; }
+    .log-muted   { color: #334155; }
+    .log-info    { color: var(--accent); }
+    .log-success { color: var(--green); }
+    .log-warn    { color: var(--yellow); }
+    .log-error   { color: var(--red); }
+
+    .cursor {
+      display: inline-block;
+      width: 7px;
+      height: 0.9em;
+      background: var(--green);
+      vertical-align: text-bottom;
+      animation: blink 1s step-end infinite;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    .completion-panel {
+      margin-top: 1.4rem;
+      background: rgba(74,222,128,0.06);
+      border: 1px solid rgba(74,222,128,0.2);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      text-align: center;
+      animation: fadeIn 0.4s ease;
+    }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } }
+
+    .completion-icon {
+      width: 3rem;
+      height: 3rem;
+      background: rgba(74,222,128,0.12);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 0.75rem;
+      color: var(--green);
+    }
+    .completion-icon svg { width: 24px; height: 24px; }
+
+    .completion-panel h3 {
+      font-size: 1.2rem;
+      color: var(--green);
+      margin-bottom: 0.4rem;
+    }
+
+    #completionStats { font-size: 0.875rem; color: var(--muted); }
+    #completionStats b { color: var(--text); font-weight: 600; }
+
+    .github-sub { margin-top: 1rem; font-size: 0.78rem; color: var(--muted); }
+    .github-sub a { color: var(--accent); text-decoration: none; }
+    .github-sub a:hover { text-decoration: underline; }
+
+    /* ── Run Locally section ─────────────────────────────────────── */
+    .local-section {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.75rem 2rem;
+      background: rgba(255,255,255,0.02);
+    }
+    .local-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.5rem;
+    }
+    .local-header-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: rgba(96,165,250,0.1);
+      border: 1px solid rgba(96,165,250,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+    .local-header-icon svg { width: 16px; height: 16px; }
+    .local-header h3 { font-size: 1rem; font-weight: 600; margin: 0; }
+    .local-desc { font-size: 0.85rem; color: var(--muted); margin-bottom: 1.25rem; line-height: 1.55; }
+    .local-commands {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      margin-bottom: 1.25rem;
+    }
+    .local-cmd {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.6rem 0.9rem;
+    }
+    .local-cmd-num {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--accent);
+      background: rgba(96,165,250,0.1);
+      border-radius: 4px;
+      padding: 0.15rem 0.45rem;
+      flex-shrink: 0;
+    }
+    .local-cmd code {
+      font-family: 'Courier New', monospace;
+      font-size: 0.8rem;
+      color: var(--green);
+      flex: 1;
+      word-break: break-all;
+    }
+    .local-cmd-copy {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--muted);
+      padding: 0.2rem;
+      border-radius: 4px;
+      display: flex;
+      transition: color 0.15s;
+    }
+    .local-cmd-copy:hover { color: var(--text); }
+    .local-cmd-copy svg { width: 14px; height: 14px; }
+    .local-perks {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .local-perk {
+      font-size: 0.75rem;
+      color: var(--muted);
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 0.25rem 0.75rem;
+    }
+    .local-perk span { color: var(--text); }
+    @media (max-width: 600px) {
+      .local-section { padding: 1.25rem; }
+    }
+
+    footer {
+      text-align: center;
+      padding: 2.5rem 0;
+      color: var(--muted);
+      font-size: 0.78rem;
+      border-top: 1px solid var(--border);
+    }
+    footer a { color: var(--accent); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+    .heart { color: var(--red); }
+
+    [hidden] { display: none !important; }
+
+    @media (max-width: 600px) {
+      .form-card, .progress-card { padding: 1.25rem; }
+      .hero { padding: 3rem 0 2rem; }
+      section { padding: 2.25rem 0; }
+      .github-banner { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
+      </svg>
+      VTU Autopilot
+    </a>
+    <a href="https://github.com/vikas-bhat-d/vtu-course-automation" target="_blank" rel="noopener noreferrer" class="nav-star github-link">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/>
+      </svg>
+      Star on GitHub
+    </a>
+  </div>
+</nav>
+
+<div class="container">
+
+  <section class="hero">
+    <div class="hero-badge">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      Not affiliated with VTU (obviously)
+    </div>
+    <h1>VTU Autopilot</h1>
+    <p class="hero-tagline">
+      Auto-completing VTU courses since VTU decided
+      <em>166 lectures per subject was reasonable.</em><br>
+      You have better things to do.
+    </p>
+    <div class="stats-row">
+      <div class="stat-pill">
+        <span class="stat-number" id="studentsCounter">0</span>
+        <span class="stat-label">Students who got their Sundays back</span>
+      </div>
+      <div class="stat-pill">
+        <span class="stat-number" id="lecturesCounter">0</span>
+        <span class="stat-label">Lectures VTU thinks you watched</span>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding: 0 0 2.5rem;">
+    <div class="github-banner">
+      <div class="github-banner-text">
+        <h3>This tool saved you ~<span id="savedHoursBanner">55</span> hours. Pay it forward.</h3>
+        <p>A GitHub star takes <em>3 seconds</em> and keeps this project alive for the next student.</p>
+      </div>
+      <a href="https://github.com/vikas-bhat-d/vtu-course-automation" target="_blank" rel="noopener noreferrer" class="star-btn github-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/>
+        </svg>
+        Star on GitHub
+      </a>
+    </div>
+  </section>
+
+  <section>
+    <p class="section-label">The process</p>
+    <h2 class="section-title">Four steps to freedom</h2>
+    <p class="section-sub">VTU made a portal. We made a bypass.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/>
+          </svg>
+        </div>
+        <div class="step-body">
+          <h3>Enter credentials</h3>
+          <p>Your VTU online portal login. Same ones you use at online.vtu.ac.in.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/>
+          </svg>
+        </div>
+        <div class="step-body">
+          <h3>Pick your course</h3>
+          <p>Paste the course slug from the URL. We will discover every lecture automatically.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+          </svg>
+        </div>
+        <div class="step-body">
+          <h3>Watch the magic</h3>
+          <p>Real-time progress in your browser. VTU servers get respectfully bamboozled.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-icon" style="background:rgba(74,222,128,0.08);border-color:rgba(74,222,128,0.2);color:var(--green);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+        </div>
+        <div class="step-body">
+          <h3>Touch grass</h3>
+          <p>Go outside. Eat. Sleep. Call your parents. You have genuinely earned it.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="formSection">
+    <p class="section-label">Launch</p>
+    <h2 class="section-title">Engage Autopilot</h2>
+    <p class="section-sub">Credentials are wiped from memory the moment your job completes.</p>
+
+    <div class="form-layout">
+      <div>
+        <div class="form-card">
+          <div id="formError" class="form-error" hidden>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+            <span id="formErrorText"></span>
+          </div>
+
+          <div class="adminNotificationBanner" hidden style="display:flex;align-items:center;gap:0.75rem;background:rgba(96,165,250,0.07);border:1px solid rgba(96,165,250,0.25);border-radius:10px;padding:0.75rem 1rem;margin-bottom:1rem;font-size:0.85rem;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M6 9l6-6 6 6M9 5v14a1 1 0 001 1h8a1 1 0 001-1V5"/></svg>
+            <span class="adminNotificationText" style="color:#60a5fa;flex:1"></span>
+          </div>
+
+          <form id="submitForm" autocomplete="off" novalidate>
+            <div class="form-row">
+              <label for="email">VTU Online Email</label>
+              <div class="input-wrap has-icon">
+                <span class="input-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
+                  </svg>
+                </span>
+                <input type="email" id="email" placeholder="you@gmail.com" required autocomplete="username" />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <label for="password">Password</label>
+              <div class="input-wrap has-icon">
+                <span class="input-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/>
+                  </svg>
+                </span>
+                <input type="password" id="password" placeholder="**********" required autocomplete="current-password" style="padding-right:2.5rem;" />
+                <button type="button" class="toggle-pw" id="togglePw" title="Show/hide password">
+                  <svg id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <label for="courseSlug">Course Slug</label>
+              <div class="input-wrap has-icon">
+                <span class="input-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/>
+                  </svg>
+                </span>
+                <input type="text" id="courseSlug" placeholder="e.g. 1-social-networks" required spellcheck="false" autocomplete="off" />
+              </div>
+              <p class="hint">
+                Go to your course &rarr; copy the last part of the URL.<br>
+                <code>online.vtu.ac.in/student/course/<b style="color:var(--accent)">1-social-networks</b></code><br>
+                Everything after <code>/course/</code> is the slug.
+              </p>
+            </div>
+
+            <button type="submit" class="btn-primary" id="submitBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+              </svg>
+              Engage Autopilot
+            </button>
+          </form>
+
+          <div class="divider">or track an existing job</div>
+
+          <div class="track-row">
+            <input type="text" id="trackInput" placeholder="Paste Job ID here..." autocomplete="off" spellcheck="false" />
+            <button class="btn-secondary" id="trackBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              </svg>
+              Track
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-layout-left">
+        <div class="form-aside">
+          <h4>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
+            </svg>
+            Before you launch
+          </h4>
+          <div class="aside-tip">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            <p>Use your <b>online.vtu.ac.in</b> login, not your university portal credentials.</p>
+          </div>
+          <div class="aside-tip">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            <p>The course slug is the part after <b>/my-courses/</b> in the URL bar.</p>
+          </div>
+          <div class="aside-tip">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            <p>You will get a <b>Job ID</b> — save it to reconnect if you close the tab.</p>
+          </div>
+          <div class="aside-tip">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            <p>Your password is <b>never stored</b> — wiped from memory on completion.</p>
+          </div>
+        </div>
+
+        <div class="form-aside" style="border-color:rgba(56,189,248,0.2);background:rgba(56,189,248,0.03);">
+          <h4>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+            </svg>
+            Queue system
+          </h4>
+          <div class="aside-tip">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+            </svg>
+            <p>Jobs run in order. During high traffic you will see your <b>queue position</b> in the terminal.</p>
+          </div>
+          <div class="aside-tip">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/>
+            </svg>
+            <p>Close the tab anytime — your job keeps running. Come back with the Job ID to check.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="localSection">
+    <div class="local-section">
+      <div class="local-header">
+        <div class="local-header-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
+          </svg>
+        </div>
+        <h3>Have Git &amp; Node? Run it on your own machine.</h3>
+      </div>
+      <p class="local-desc">
+        This saves server resources for students who need it. Your credentials never leave your laptop, and there&rsquo;s no queue.
+      </p>
+      <div class="local-commands">
+        <div class="local-cmd">
+          <span class="local-cmd-num">1</span>
+          <code id="lcmd1">git clone https://github.com/vikas-bhat-d/vtu-course-automation &amp;&amp; cd vtu-course-automation &amp;&amp; npm install</code>
+          <button class="local-cmd-copy" onclick="copyCmd('lcmd1', this)" title="Copy">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+          </button>
+        </div>
+        <div class="local-cmd">
+          <span class="local-cmd-num">2</span>
+          <code id="lcmd2">npm run serve</code>
+          <button class="local-cmd-copy" onclick="copyCmd('lcmd2', this)" title="Copy">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+          </button>
+        </div>
+        <div class="local-cmd">
+          <span class="local-cmd-num">3</span>
+          <code id="lcmd3">open http://localhost:3000</code>
+          <button class="local-cmd-copy" onclick="copyCmd('lcmd3', this)" title="Copy">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="local-perks">
+        <div class="local-perk"><span>No queue</span> &mdash; instant start</div>
+        <div class="local-perk"><span>Credentials stay local</span> &mdash; never hit a server</div>
+        <div class="local-perk"><span>Frees up capacity</span> &mdash; for students without Node</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="progressSection" hidden>
+    <p class="section-label">Live progress</p>
+    <h2 class="section-title">Autopilot Active</h2>
+    <p class="section-sub">Your job is running. Reconnect anytime within 1 hour using the Job ID below.</p>
+
+    <div class="progress-card">
+      <div class="job-id-row">
+        <span class="job-id-label">Job ID</span>
+        <span id="displayJobId"></span>
+        <button class="copy-btn" id="copyJobId">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+          </svg>
+          Copy
+        </button>
+        <button class="copy-btn" id="shareJobId">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+          </svg>
+          Share
+        </button>
+      </div>
+
+      <div class="adminNotificationBanner" hidden style="display:flex;align-items:center;gap:0.75rem;background:rgba(96,165,250,0.07);border:1px solid rgba(96,165,250,0.25);border-radius:10px;padding:0.75rem 1rem;margin-bottom:1rem;font-size:0.85rem;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M6 9l6-6 6 6M9 5v14a1 1 0 001 1h8a1 1 0 001-1V5"/></svg>
+        <span class="adminNotificationText" style="color:#60a5fa;flex:1"></span>
+      </div>
+
+      <div id="queueBanner" hidden style="display:flex;align-items:center;gap:0.75rem;background:rgba(251,191,36,0.07);border:1px solid rgba(251,191,36,0.25);border-radius:10px;padding:0.75rem 1rem;margin-bottom:1rem;font-size:0.85rem;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span id="queueBannerText" style="color:#fbbf24;flex:1"></span>
+      </div>
+
+      <div class="progress-bar-wrap">
+        <div id="progressFill"></div>
+      </div>
+      <div class="progress-meta">
+        <span id="progressText">Initializing...</span>
+        <span id="progressPct">0%</span>
+      </div>
+
+      <div class="terminal">
+        <div class="terminal-titlebar">
+          <div class="dot dot-red"></div>
+          <div class="dot dot-yellow"></div>
+          <div class="dot dot-green"></div>
+          <span class="terminal-title">vtu-autopilot &mdash; bash</span>
+        </div>
+        <div id="logTerminal">
+          <div class="log-line log-muted">$ vtu-autopilot --nuke-all-lectures<span class="cursor"></span></div>
+        </div>
+      </div>
+
+      <div id="completionSection" hidden>
+        <div class="completion-panel">
+          <div class="completion-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
+            </svg>
+          </div>
+          <h3>Mission Accomplished!</h3>
+          <p id="completionStats">Processing complete.</p>
+        </div>
+      </div>
+    </div>
+
+    <p style="text-align:center;margin-top:1.25rem">
+      <button class="btn-secondary" id="runAnotherBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+        Run another course
+      </button>
+    </p>
+  </section>
+
+  <footer>
+    <p>
+      Built with <span class="heart">&#9829;</span> and existential dread by
+      <a href="https://github.com/vikas-bhat-d" target="_blank" rel="noopener noreferrer">Vikas Bhat D</a>
+      &nbsp;&middot;&nbsp;
+      <a href="https://github.com/vikas-bhat-d/vtu-course-automation" target="_blank" rel="noopener noreferrer" class="github-link">Source on GitHub</a>
+    </p>
+    <p style="margin-top:0.4rem;">Not affiliated with VTU. Their video portal belongs to us now.</p>
+  </footer>
+
+</div>
+
+<script>
+  window.VTU_API_BASE = "";
+</script>
+
+<script>
+  "use strict";
+
+  const API_BASE = window.VTU_API_BASE || "";
+
+  let currentJobId = null;
+  let sseSource    = null;
+  let jobTotal     = 0;
+  let jobProcessed = 0;
+  let githubUrl    = "https://github.com/vikas-bhat-d/vtu-course-automation";
+  let isCompleted  = false;
+
+  document.addEventListener("DOMContentLoaded", () => {
+    loadStats();
+    loadNotification();
+    setupForm();
+    setupTracker();
+    setupProgressControls();
+
+    const hashId = location.hash.slice(1);
+    if (hashId && /^[\da-f]{8}-[\da-f]{4}-4[\da-f]{3}-[89ab][\da-f]{3}-[\da-f]{12}$/i.test(hashId)) {
+      connectToJob(hashId);
+    }
+  });
+
+  async function loadStats() {
+    try {
+      const data = await fetch(API_BASE + "/api/stats").then(r => r.json());
+      animateCounter("studentsCounter", data.studentsHelped  || 0);
+      animateCounter("lecturesCounter", data.lecturesCompleted || 0);
+      if (data.githubUrl) {
+        githubUrl = data.githubUrl;
+        document.querySelectorAll(".github-link").forEach(el => { el.href = githubUrl; });
+      }
+    } catch (_) {}
+  }
+
+  function animateCounter(id, target) {
+    const el = document.getElementById(id);
+    if (!el || target === 0) { if (el) el.textContent = "0"; return; }
+    let current = 0;
+    const steps = 60, step = target / steps, interval = 1400 / steps;
+    const t = setInterval(() => {
+      current = Math.min(current + step, target);
+      el.textContent = Math.floor(current).toLocaleString();
+      if (current >= target) clearInterval(t);
+    }, interval);
+  }
+
+  async function loadNotification() {
+    try {
+      const data = await fetch(API_BASE + "/api/notification").then(r => r.json());
+      updateNotificationUI(data);
+      // Refresh notification state every 10 seconds to pick up admin changes
+      setInterval(() => {
+        fetch(API_BASE + "/api/notification").then(r => r.json()).then(updateNotificationUI).catch(() => {});
+      }, 10_000);
+    } catch (_) {}
+  }
+
+  function updateNotificationUI({ message, disabled }) {
+    const banners = document.querySelectorAll(".adminNotificationBanner");
+    const texts = document.querySelectorAll(".adminNotificationText");
+    const submitBtn = document.getElementById("submitBtn");
+
+    // Show/hide banner(s) and set text
+    if (message && message.trim()) {
+      texts.forEach(t => { t.textContent = message; });
+      banners.forEach(b => { b.hidden = false; });
+    } else {
+      banners.forEach(b => { b.hidden = true; });
+    }
+
+    // Enable/disable submit button (don't override during loading)
+    if (submitBtn) {
+      if (!submitBtn.classList.contains("loading")) {
+        submitBtn.disabled = !!disabled;
+      }
+    }
+
+    // Also disable/enable form inputs based on disabled flag
+    document.querySelectorAll("#submitForm input").forEach(i => i.disabled = !!disabled);
+  }
+
+  function copyCmd(id, btn) {
+    const text = document.getElementById(id).textContent
+      .replace(/&amp;/g, "&").replace(/&amp;&amp;/g, "&&");
+    navigator.clipboard?.writeText(text).then(() => {
+      const orig = btn.innerHTML;
+      btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`;
+      btn.style.color = "var(--green)";
+      setTimeout(() => { btn.innerHTML = orig; btn.style.color = ""; }, 1500);
+    });
+  }
+
+  function setupForm() {
+    let pwVisible = false;
+    document.getElementById("togglePw").addEventListener("click", () => {
+      pwVisible = !pwVisible;
+      const pw = document.getElementById("password");
+      pw.type = pwVisible ? "text" : "password";
+      const icon = document.getElementById("eyeIcon");
+      icon.innerHTML = pwVisible
+        ? '<path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/>'
+        : '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+    });
+
+    document.getElementById("submitForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      hideFormError();
+
+      const email      = document.getElementById("email").value.trim();
+      const password   = document.getElementById("password").value;
+      const courseSlug = document.getElementById("courseSlug").value.trim();
+
+      if (!email || !password || !courseSlug) {
+        showFormError("Fill in all three fields. VTU will not automate itself.");
+        return;
+      }
+
+      setFormLoading(true);
+      try {
+        const res  = await fetch(API_BASE + "/api/submit", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password, courseSlug }),
+        });
+        const data = await res.json();
+        if (!res.ok) { showFormError(data.error || "Something went wrong."); setFormLoading(false); return; }
+        currentJobId = data.jobId;
+        location.hash = currentJobId;
+        showProgressSection(data.jobId, data.position, data.existing);
+        connectToJob(data.jobId);
+      } catch (_) {
+        showFormError("Network error. Check your connection and try again.");
+        setFormLoading(false);
+      }
+    });
+  }
+
+  function setFormLoading(on) {
+    const btn = document.getElementById("submitBtn");
+    btn.disabled = on;
+    btn.innerHTML = on
+      ? `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"/><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"/><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"/></svg> Launching...`
+      : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> Engage Autopilot`;
+    document.querySelectorAll("#submitForm input").forEach(i => i.disabled = on);
+  }
+
+  function showFormError(msg) {
+    const el = document.getElementById("formError");
+    document.getElementById("formErrorText").textContent = msg;
+    el.hidden = false;
+  }
+
+  function hideFormError() { document.getElementById("formError").hidden = true; }
+
+  function setupTracker() {
+    document.getElementById("trackBtn").addEventListener("click", () => {
+      const id = document.getElementById("trackInput").value.trim();
+      if (id) connectToJob(id);
+    });
+    document.getElementById("trackInput").addEventListener("keydown", e => {
+      if (e.key === "Enter") document.getElementById("trackBtn").click();
+    });
+  }
+
+  function setQueueBanner(position) {
+    const banner = document.getElementById("queueBanner");
+    const text   = document.getElementById("queueBannerText");
+    if (!position || position <= 0) {
+      banner.hidden = true;
+      return;
+    }
+    // Fetch total queue depth so we can show "X of Y"
+    fetch(API_BASE + "/api/queue").then(r => r.json()).then(q => {
+      const ahead = position - 1;
+      const total = q.total || position;
+      text.textContent = ahead === 0
+        ? `You're next! One job is finishing up ahead of you.`
+        : `You're #${position} in the queue — ${ahead} student${ahead > 1 ? "s" : ""} ahead of you (${total} job${total !== 1 ? "s" : ""} total). Each course takes ~20 min.`;
+      banner.hidden = false;
+    }).catch(() => {
+      text.textContent = `You're #${position} in the queue. Hang tight — each course takes ~10-15 min.`;
+      banner.hidden = false;
+    });
+  }
+
+  function showProgressSection(jobId, position, existing = false) {
+    document.getElementById("formSection").hidden     = true;
+    document.getElementById("localSection").hidden    = true;
+    document.getElementById("progressSection").hidden = false;
+    document.getElementById("displayJobId").textContent = jobId;
+    document.getElementById("completionSection").hidden = true;
+    document.getElementById("queueBanner").hidden = true;
+    isCompleted = false;
+    clearLog();
+    if (existing) {
+      appendLog("You already have a job running for this course \u2014 reconnecting to it...", "warn");
+    } else if (position > 1) {
+      setQueueBanner(position);
+      appendLog(`Queue position: ${position}. Sit tight \u2014 your turn is coming.`, "info");
+    } else {
+      appendLog("Autopilot engaged! Connecting to VTU servers...", "info");
+    }
+  }
+
+  function setupProgressControls() {
+    document.getElementById("copyJobId").addEventListener("click", () => {
+      const id = document.getElementById("displayJobId").textContent;
+      navigator.clipboard?.writeText(id).then(() => {
+        const btn = document.getElementById("copyJobId");
+        btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Copied!`;
+        setTimeout(() => btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy`, 1500);
+      });
+    });
+
+    document.getElementById("shareJobId").addEventListener("click", () => {
+      const url = `${location.origin}${location.pathname}#${document.getElementById("displayJobId").textContent}`;
+      navigator.clipboard?.writeText(url).then(() => {
+        const btn = document.getElementById("shareJobId");
+        btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Copied!`;
+        setTimeout(() => btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> Share`, 1800);
+      });
+    });
+
+    document.getElementById("runAnotherBtn").addEventListener("click", () => {
+      if (sseSource) { sseSource.close(); sseSource = null; }
+      location.hash = "";
+      document.getElementById("progressSection").hidden = true;
+      document.getElementById("formSection").hidden     = false;
+      document.getElementById("localSection").hidden    = false;
+      setFormLoading(false);
+      document.getElementById("submitForm").reset();
+      clearLog();
+      jobTotal = jobProcessed = 0;
+      isCompleted = false;
+    });
+  }
+
+  function connectToJob(jobId) {
+    if (sseSource) { sseSource.close(); sseSource = null; }
+
+    if (document.getElementById("progressSection").hidden) {
+      document.getElementById("formSection").hidden     = true;
+      document.getElementById("localSection").hidden    = true;
+      document.getElementById("progressSection").hidden = false;
+      document.getElementById("completionSection").hidden = true;
+      clearLog();
+    }
+
+    document.getElementById("displayJobId").textContent = jobId;
+    currentJobId = jobId;
+
+    sseSource = new EventSource(API_BASE + `/api/status/${jobId}`);
+
+    ["snapshot","phase","log","course_info","lecture_start","lecture_done","complete","done","failed","queue_pos","status"]
+      .forEach(evt => sseSource.addEventListener(evt, e => {
+        if (evt === "snapshot") handleSnapshot(JSON.parse(e.data));
+        else handleEvent(evt, JSON.parse(e.data));
+      }));
+
+    sseSource.onerror = () => { if (isCompleted) sseSource.close(); };
+  }
+
+  function handleSnapshot(snap) {
+    jobTotal = snap.total || 0; jobProcessed = snap.processed || 0;
+    updateBar(snap.progress || 0, snap.processed || 0, snap.total || 0);
+    (snap.logs || []).forEach(({ type, data }) => handleEvent(type, data, true));
+    if (snap.status === "done" && snap.result) onComplete(snap.result);
+    else if (snap.status === "failed") onFailed(snap.result?.error || "Job failed");
+    else if (snap.status === "queued") { appendLog(`Queue position: ${snap.position}`, "info"); setQueueBanner(snap.position); }
+  }
+
+  function handleEvent(type, data, isReplay = false) {
+    switch (type) {
+      case "phase":       appendLog(data.message, "info"); break;
+      case "log":         appendLog(data.text, data.level || "log"); break;
+      case "course_info":
+        jobTotal = data.total;
+        appendLog(`"${data.title}" &mdash; ${data.total} lectures queued`, "success");
+        updateBar(0, 0, data.total);
+        const h = Math.round(data.total * 20 / 60);
+        document.getElementById("savedHoursBanner").textContent = h;
+        break;
+      case "lecture_done": {
+        // Don't move the progress bar on retry — first-pass position stands
+        if (!data.retry) {
+          jobProcessed = data.idx;
+          const pct = jobTotal ? Math.round((data.idx / jobTotal) * 100) : 0;
+          updateBar(pct, data.idx, jobTotal);
+        }
+        const retryTag = data.retry ? " [retry]" : "";
+        if (data.status === "done")
+          appendLog(`[${data.idx}/${jobTotal}] ${data.title}${retryTag}`, "success");
+        else if (data.status === "skip")
+          appendLog(`[${data.idx}/${jobTotal}] Skipped: ${data.title} — ${data.reason}`, "warn");
+        else if (data.status === "maxed") {
+          const level = data.retry ? "error" : "warn";
+          appendLog(`[${data.idx}/${jobTotal}] Skipped: ${data.title} — ${data.reason}`, level);
+        } else if (data.status === "error") {
+          const level = data.retry ? "error" : "warn";
+          appendLog(`[${data.idx}/${jobTotal}] ${data.title} — ${data.reason}`, level);
+        }
+        break;
+      }
+      case "complete": case "done": if (!isReplay) onComplete(data); break;
+      case "failed":    if (!isReplay) onFailed(data.message); break;
+      case "queue_pos": if (!isReplay) { appendLog(`Queue position updated: ${data.position}`, "info"); setQueueBanner(data.position); } break;
+      case "status":    if (!isReplay && data.status === "processing") { document.getElementById("queueBanner").hidden = true; appendLog("Your job is now processing!", "info"); } break;
+    }
+  }
+
+  function onComplete(data) {
+    if (sseSource) { sseSource.close(); sseSource = null; }
+    isCompleted = true;
+    updateBar(100, data.completed ?? data.total, data.total);
+    appendLog("", "log");
+    appendLog("MISSION ACCOMPLISHED", "success");
+    appendLog(`${data.completed ?? 0} / ${data.total} lectures marked complete`, "success");
+    appendLog(`${data.skipped ?? 0} skipped  ~${Math.round(data.total * 20 / 60)}h reclaimed`, "success");
+    document.getElementById("completionSection").hidden = false;
+    document.getElementById("completionStats").innerHTML =
+      `<b>${data.completed ?? 0}</b> lectures completed &bull; <b>${data.skipped ?? 0}</b> skipped &bull; ~<b>${Math.round((data.total || 0) * 20 / 60)}</b> hours reclaimed`;
+    if (data.stats) {
+      animateCounter("studentsCounter", data.stats.studentsHelped);
+      animateCounter("lecturesCounter", data.stats.lecturesCompleted);
+    }
+    setTimeout(() => document.querySelector(".completion-panel")?.scrollIntoView({ behavior: "smooth", block: "center" }), 1200);
+  }
+
+  function onFailed(message) {
+    if (sseSource) { sseSource.close(); sseSource = null; }
+    appendLog(`FAILED: ${message || "Unknown error"}`, "error");
+    appendLog("Houston, we have a problem. VTU is fighting back. Try again.", "warn");
+  }
+
+  function appendLog(text, level = "log") {
+    const term = document.getElementById("logTerminal");
+    const line = document.createElement("div");
+    line.className = `log-line log-${level}`;
+    line.textContent = text;
+    term.appendChild(line);
+    term.scrollTop = term.scrollHeight;
+  }
+
+  function clearLog() {
+    document.getElementById("logTerminal").innerHTML =
+      '<div class="log-line log-muted">$ vtu-autopilot --nuke-all-lectures<span class="cursor"></span></div>';
+  }
+
+  function updateBar(pct, processed, total) {
+    document.getElementById("progressFill").style.width = pct + "%";
+    document.getElementById("progressPct").textContent  = pct + "%";
+    document.getElementById("progressText").textContent = total ? `${processed} / ${total} lectures` : "Initializing...";
+  }
+</script>
+</body>
+</html>
